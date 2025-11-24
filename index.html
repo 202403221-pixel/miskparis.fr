@@ -1,306 +1,432 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>أسامة السيد سعد - مصمم مواقع وتطبيقات</title>
-  <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Misk Parisé - Luxury Perfumes</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Cormorant+Garamond:wght@300;400;500&family=Cinzel:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+    <style>
+        :root {
+            --gold: #C9A96A;
+            --deep-gold: #B3874A;
+            --dark-brown: #2C1F18;
+            --cream: #FDF8F0;
+            --light-cream: #F8F2E9;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { background: var(--cream); color: var(--dark-brown); font-family: 'Cormorant Garamond', serif; overflow-x: hidden; }
 
-    body {
-      line-height: 1.6;
-      color: #333;
-      background-color: #f8f9fa;
-    }
+        /* الهيرو بفيديو إعلاني */
+        .hero {
+            position: relative;
+            height: 100vh;
+            min-height: 680px;
+            overflow: hidden;
+        }
+        .hero-video {
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            object-fit: cover;
+            z-index: 0;
+        }
+        .hero-overlay {
+            position: absolute;
+            inset: 0;
+            background: rgba(0,0,0,0.48);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            z-index: 1;
+        }
+        .hero-content h1 {
+            font-family: 'Cinzel', serif;
+            font-size: 110px;
+            letter-spacing: 18px;
+            color: #fff;
+            text-shadow: 0 10px 50px rgba(0,0,0,0.9);
+            opacity: 0;
+            animation: fadeUp 1.8s ease forwards 1s;
+        }
+        .hero-content p {
+            font-size: 30px;
+            letter-spacing: 10px;
+            color: var(--gold);
+            margin: 30px 0 70px;
+            opacity: 0;
+            animation: fadeUp 1.8s ease forwards 1.6s;
+        }
+        .btn-hero {
+            background: transparent;
+            border: 3px solid var(--gold);
+            color: var(--gold);
+            padding: 24px 80px;
+            font-size: 20px;
+            letter-spacing: 8px;
+            border-radius: 80px;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: 0.6s;
+            opacity: 0;
+            animation: fadeUp 1.8s ease forwards 2.2s;
+        }
+        .btn-hero:hover { background: var(--gold); color: var(--dark-brown); transform: translateY(-8px); }
+        @keyframes fadeUp { to { opacity: 0; transform: translateY(50px); } to { opacity: 1; transform: translateY(0); } }
 
-    .container {
-      width: 90%;
-      max-width: 1200px;
-      margin: 0 auto;
-    }
+        /* النافبار */
+        .header {
+            position: fixed; top: 0; width: 100%; background: rgba(253,248,240,0.97);
+            backdrop-filter: blur(25px); z-index: 1000; padding: 30px 0;
+            box-shadow: 0 8px 40px rgba(0,0,0,0.12);
+        }
+        .nav-container { display: flex; justify-content: space-between; align-items: center; max-width: 1460px; margin: 0 auto; padding: 0 20px; }
+        .logo { font-family: 'Cinzel', serif; font-size: 42px; letter-spacing: 8px; color: var(--deep-gold); }
+        .controls { display: flex; gap: 18px; align-items: center; }
+        .lang-btn { background: transparent; border: 2px solid var(--deep-gold); color: var(--deep-gold); padding: 11px 20px; border-radius: 35px; font-size: 14px; cursor: pointer; transition: 0.4s; }
+        .lang-btn.active, .lang-btn:hover { background: var(--deep-gold); color: #fff; }
+        .cart-icon { position: relative; font-size: 26px; color: var(--deep-gold); cursor: pointer; }
+        .cart-count { position: absolute; top: -10px; right: -10px; background: var(--deep-gold); color: #fff; width: 22px; height: 22px; border-radius: 50%; font-size: 12px; display: flex; align-items: center; justify-content: center; }
+        .order-btn { background: var(--deep-gold); color: #fff; padding: 16px 35px; border-radius: 50px; font-size: 15px; font-weight: 600; letter-spacing: 2px; cursor: pointer; box-shadow: 0 12px 35px rgba(179,135,74,0.4); transition: 0.4s; }
+        .order-btn:hover { background: #D4B36A; transform: translateY(-5px); }
 
-    .section {
-      padding: 80px 0;
-    }
+        /* سلة الطلبات */
+        .sidebar {
+            position: fixed; top: 0; right: -450px; width: 420px; height: 100vh;
+            background: var(--light-cream); z-index: 2000; transition: 0.5s ease;
+            box-shadow: -10px 0 40px rgba(0,0,0,0.15); padding: 100px 30px 40px; overflow-y: auto;
+        }
+        .sidebar.open { right: 0; }
+        .sidebar-header h2 { font-family: 'Cinzel', serif; font-size: 28px; color: var(--deep-gold); }
+        .close-cart { font-size: 28px; cursor: pointer; color: var(--dark-brown); }
+        .cart-total { text-align: center; padding: 25px 0; font-size: 24px; color: var(--deep-gold); font-weight: bold; }
+        .send-whatsapp { display: block; width: 90%; margin: 20px auto; background: var(--deep-gold); color: #fff; padding: 18px; border-radius: 50px; text-align: center; font-size: 17px; font-weight: 600; letter-spacing: 2px; text-decoration: none; transition: 0.4s; }
+        .send-whatsapp:hover { background: #D4B36A; }
 
-    .section h2 {
-      text-align: center;
-      margin-bottom: 50px;
-      font-size: 2.5em;
-      color: #2c3e50;
-      position: relative;
-    }
+        /* فيديو الـ hover للعطور */
+        .media-wrapper {
+            position: relative; width: 100%; height: 400px; overflow: hidden; border-radius: 25px 25px 0 0; cursor: pointer;
+        }
+        .media-wrapper img, .media-wrapper video {
+            width: 100%; height: 100%; object-fit: cover; position: absolute; top: 0; left: 0; transition: opacity 0.7s ease;
+        }
+        .media-wrapper video { opacity: 0; }
+        .media-wrapper:hover img { opacity: 0; }
+        .media-wrapper:hover video { opacity: 1; }
 
-    .section h2::after {
-      content: '';
-      display: block;
-      width: 80px;
-      height: 4px;
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-      margin: 15px auto;
-      border-radius: 2px;
-    }
+        .products { padding: 160px 0 140px; background: var(--cream); }
+        .section-title { font-family: 'Cinzel', serif; font-size: 56px; text-align: center; margin-bottom: 100px; color: var(--deep-gold); letter-spacing: 7px; }
+        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 45px; max-width: 1600px; margin: 0 auto; padding: 0 20px; justify-content: center; }
+        .card { background: #fff; border-radius: 25px; overflow: hidden; box-shadow: 0 20px 50px rgba(0,0,0,0.1); transition: all 0.6s ease; }
+        .card:hover { transform: translateY(-25px); box-shadow: 0 50px 90px rgba(179,135,74,0.25); }
+        .card h3 { font-family: 'Playfair Display', serif; font-size: 28px; text-align: center; margin: 30px 0 15px; color: var(--dark-brown); }
+        .sizes { display: flex; justify-content: center; gap: 18px; margin: 25px 0; flex-wrap: wrap; }
+        .size-btn { background: transparent; border: 2px solid var(--deep-gold); color: var(--deep-gold); padding: 12px 22px; border-radius: 35px; font-size: 14px; cursor: pointer; transition: 0.4s; }
+        .size-btn.active, .size-btn:hover { background: var(--deep-gold); color: #fff; }
+        .price { text-align: center; font-size: 26px; color: var(--deep-gold); font-weight: 700; margin: 18px 0; }
+        .btn-card { display: block; width: 88%; margin: 20px auto; background: transparent; border: 2.5px solid var(--deep-gold); color: var(--deep-gold); padding: 16px; border-radius: 50px; text-align: center; font-size: 15px; font-weight: 600; letter-spacing: 3px; text-transform: uppercase; cursor: pointer; transition: 0.4s; }
+        .btn-card:hover, .btn-card.added { background: var(--deep-gold); color: #fff; }
 
-    header {
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-      color: white;
-      text-align: center;
-      padding: 80px 0;
-    }
+        .footer { background: var(--dark-brown); color: var(--gold); text-align: center; padding: 80px 20px; font-size: 17px; letter-spacing: 2px; }
 
-    /* الصورة الجديدة */
-    .profile-img {
-      width: 180px;
-      height: 180px;
-      border-radius: 50%;
-      overflow: hidden;
-      border: 5px solid rgba(255,255,255,0.3);
-      margin: 0 auto 25px;
-      transition: transform 0.4s ease, box-shadow 0.4s ease;
-    }
-
-    .profile-img img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-    }
-
-    .profile-img:hover {
-      transform: scale(1.08);
-      box-shadow: 0 0 25px rgba(255,255,255,0.4);
-    }
-
-    .profile h1 {
-      font-size: 3em;
-      margin-bottom: 15px;
-      text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
-    }
-
-    .profile p {
-      font-size: 1.4em;
-      opacity: 0.95;
-    }
-
-    nav {
-      background: #2c3e50;
-      position: sticky;
-      top: 0;
-      z-index: 1000;
-      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-    }
-
-    nav ul {
-      list-style: none;
-      display: flex;
-      justify-content: center;
-      flex-wrap: wrap;
-    }
-
-    nav ul li a {
-      color: white;
-      text-decoration: none;
-      padding: 20px 25px;
-      display: block;
-      font-weight: 600;
-      transition: all 0.3s ease;
-    }
-
-    nav ul li a:hover {
-      background: #34495e;
-      color: #3498db;
-    }
-
-    #about p {
-      font-size: 1.2em;
-      text-align: center;
-      max-width: 800px;
-      margin: 0 auto;
-      line-height: 1.8;
-    }
-
-    .skills-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-      gap: 30px;
-      margin-top: 40px;
-    }
-
-    .skill-item {
-      background: white;
-      padding: 40px 30px;
-      border-radius: 10px;
-      text-align: center;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-      border-left: 5px solid #667eea;
-      transition: all 0.3s ease;
-    }
-
-    .skill-item:hover {
-      transform: translateY(-10px);
-      box-shadow: 0 15px 40px rgba(0,0,0,0.15);
-    }
-
-    .projects-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-      gap: 30px;
-      margin-top: 40px;
-    }
-
-    .project-item {
-      background: white;
-      padding: 30px;
-      border-radius: 10px;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-      transition: all 0.3s ease;
-    }
-
-    .project-item:hover {
-      transform: translateY(-5px);
-      box-shadow: 0 15px 40px rgba(0,0,0,0.15);
-    }
-
-    .education-item {
-      background: white;
-      padding: 40px;
-      border-radius: 10px;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-      text-align: center;
-      max-width: 700px;
-      margin: 0 auto;
-    }
-
-    .contact-info {
-      text-align: center;
-      font-size: 1.2em;
-    }
-
-    .contact-info a {
-      color: #667eea;
-      text-decoration: none;
-      transition: all 0.3s ease;
-      display: inline-block;
-      padding: 5px 10px;
-      border-radius: 5px;
-    }
-
-    .contact-info a:hover {
-      color: white;
-      background: #667eea;
-      transform: translateY(-3px);
-    }
-
-    footer {
-      background: #2c3e50;
-      color: white;
-      text-align: center;
-      padding: 30px 0;
-    }
-
-    @media (max-width: 768px) {
-      nav ul {
-        flex-direction: column;
-      }
-      nav ul li a {
-        padding: 15px;
-      }
-      .profile h1 {
-        font-size: 2.2em;
-      }
-    }
-  </style>
+        @media (max-width: 768px) {
+            .hero h1 { font-size: 70px; letter-spacing: 10px; }
+            .hero p { font-size: 22px; }
+            .btn-hero { padding: 18px 50px; font-size: 17px; }
+            .grid { grid-template-columns: repeat(2, 1fr); }
+            .sidebar { width: 100%; right: -100%; }
+        }
+        @media (max-width: 480px) {
+            .hero h1 { font-size: 48px; letter-spacing: 6px; }
+            .grid { grid-template-columns: 1fr; }
+            .controls { flex-direction: column; gap: 12px; }
+        }
+    </style>
 </head>
 <body>
 
-  <!-- Header Section -->
-  <header>
-    <div class="container">
-      <div class="profile">
-        <div class="profile-img">
-          <!-- ضع الصورة داخل نفس المجلد وغيّر الاسم هنا -->
-          <img src="profile.jpg" alt="صورة أسامة السيد سعد">
+    <!-- هيرو فيديو إعلاني -->
+    <section class="hero">
+        <video class="hero-video" autoplay muted loop playsinline preload="auto">
+            <source src="imags/hero-video.mp4" type="video/mp4">
+            Your browser does not support the video tag.
+        </video>
+
+        <div class="hero-overlay">
+            <div class="hero-content">
+                <h1>MISK PARISÉ</h1>
+                <p>The Essence of Eternal Elegance</p>
+                <a href="#products" class="btn-hero">Explore Collection</a>
+            </div>
         </div>
-        <h1>أسامة السيد سعد</h1>
-        <p>مصمم مواقع وتطبيقات | طالب بكلية حاسبات ومعلومات</p>
-      </div>
+    </section>
+
+    <!-- النافبار -->
+    <header class="header">
+        <div class="nav-container">
+            <div class="logo">MISK PARISÉ</div>
+            <div class="controls">
+                <button class="lang-btn active" onclick="switchLang('ar')">عربي</button>
+                <button class="lang-btn" onclick="switchLang('en')">English</button>
+                <div class="cart-icon" onclick="toggleCart()">
+                    <i class="fas fa-shopping-bag"></i>
+                    <span class="cart-count">0</span>
+                </div>
+                <div class="order-btn" onclick="openOrder()">Place Order</div>
+            </div>
+        </div>
+    </header>
+
+    <!-- سلة الطلبات -->
+    <div class="sidebar" id="sidebar">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:30px;padding-bottom:20px;border-bottom:1px solid #eee;">
+            <h2>Your Order</h2>
+            <span class="close-cart" onclick="toggleCart()">×</span>
+        </div>
+        <div class="cart-items" id="cartItems"></div>
+        <div class="cart-total">Total: <span id="cartTotal">$0</span></div>
+        <a href="#" class="send-whatsapp" id="sendWhatsapp">Send Order via WhatsApp</a>
     </div>
-  </header>
 
-  <!-- Navigation -->
-  <nav>
-    <ul>
-      <li><a href="#about">عنّي</a></li>
-      <li><a href="#skills">المهارات</a></li>
-      <li><a href="#projects">المشاريع</a></li>
-      <li><a href="#education">التعليم</a></li>
-      <li><a href="#contact">اتصل بي</a></li>
-    </ul>
-  </nav>
+    <!-- المجموعة -->
+    <section class="products" id="products">
+        <div class="container">
+            <h2 class="section-title">Signature Collection</h2>
+            <div class="grid">
 
-  <!-- About Section -->
-  <section id="about" class="section">
-    <div class="container">
-      <h2>عنّي</h2>
-      <p>أنا أسامة السيد سعد، طالب في كلية حاسبات ومعلومات، وأعمل كمصمم مواقع وتطبيقات فريلانسر. شغوف بالتكنولوجيا والبرمجة، وأسعى دائمًا لتطوير مهاراتي في مجال تصميم وتطوير الويب. أحب العمل على مشاريع مبتكرة وحل المشكلات التقنية بطرق إبداعية.</p>
-    </div>
-  </section>
+                <!-- عطر 1 -->
+                <div class="card" data-aos="fade-up" data-aos-delay="100">
+                    <div class="media-wrapper">
+                        <img src="imags/im1.jpg" alt="Fortuna">
+                        <video src="imags/im1.mp4" muted loop playsinline preload="none"></video>
+                    </div>
+                    <h3>Fortuna</h3>
+                    <div class="sizes">
+                        <button class="size-btn active" data-price="189">50ml • $189</button>
+                        <button class="size-btn" data-price="279">100ml • $279</button>
+                    </div>
+                    <p class="price">$189</p>
+                    <button class="btn-card" onclick="addToCart(this)">Add to Cart</button>
+                </div>
 
-  <!-- Skills -->
-  <section id="skills" class="section bg-light">
-    <div class="container">
-      <h2>المهارات</h2>
-      <div class="skills-grid">
-        <div class="skill-item"><h3>تصميم الويب</h3><p>HTML5, CSS3, JavaScript</p></div>
-        <div class="skill-item"><h3>تصميم التطبيقات</h3><p>واجهات المستخدم (UI/UX)</p></div>
-        <div class="skill-item"><h3>أدوات التصميم</h3><p>Figma, Adobe XD, Photoshop</p></div>
-      </div>
-    </div>
-  </section>
+                <!-- عطر 2 -->
+                <div class="card" data-aos="fade-up" data-aos-delay="200">
+                    <div class="media-wrapper">
+                        <img src="imags/im2.jpg" alt="Eternal Oud">
+                        <video src="imags/im2.mp4" muted loop playsinline preload="none"></video>
+                    </div>
+                    <h3>Eternal Oud</h3>
+                    <div class="sizes">
+                        <button class="size-btn active" data-price="169">50ml • $169</button>
+                        <button class="size-btn" data-price="249">100ml • $249</button>
+                    </div>
+                    <p class="price">$169</p>
+                    <button class="btn-card" onclick="addToCart(this)">Add to Cart</button>
+                </div>
 
-  <!-- Projects -->
-  <section id="projects" class="section">
-    <div class="container">
-      <h2>المشاريع</h2>
-      <div class="projects-grid">
-        <div class="project-item"><h3>موقع تجاري إلكتروني</h3><p>تطوير موقع تجارة إلكترونية متكامل.</p></div>
-        <div class="project-item"><h3>تطبيق إدارة مهام</h3><p>واجهة تطبيق أنيقة لإدارة الوقت.</p></div>
-        <div class="project-item"><h3>منصة تعليمية</h3><p>منصة تفاعلية لتتبع التقدّم الدراسي.</p></div>
-      </div>
-    </div>
-  </section>
+                <!-- عطر 3 -->
+                <div class="card" data-aos="fade-up" data-aos-delay="300">
+                    <div class="media-wrapper">
+                        <img src="imags/im3.jpg" alt="Royal Rose">
+                        <video src="imags/im3.mp4" muted loop playsinline preload="none"></video>
+                    </div>
+                    <h3>Royal Rose</h3>
+                    <div class="sizes">
+                        <button class="size-btn active" data-price="179">50ml • $179</button>
+                        <button class="size-btn" data-price="269">100ml • $269</button>
+                    </div>
+                    <p class="price">$179</p>
+                    <button class="btn-card" onclick="addToCart(this)">Add to Cart</button>
+                </div>
 
-  <!-- Education -->
-  <section id="education" class="section bg-light">
-    <div class="container">
-      <h2>التعليم</h2>
-      <div class="education-item">
-        <h3>كلية حاسبات ومعلومات</h3>
-        <p>بكالوريوس في الحاسبات والمعلومات - قيد الدراسة</p>
-        <p style="margin-top: 10px; color: #667eea;">تخصص تطوير البرمجيات وتصميم الويب</p>
-      </div>
-    </div>
-  </section>
+                <!-- عطر 4 -->
+                <div class="card" data-aos="fade-up" data-aos-delay="400">
+                    <div class="media-wrapper">
+                        <img src="imags/im4.jpg" alt="Midnight Musk">
+                        <video src="imags/im4.mp4" muted loop playsinline preload="none"></video>
+                    </div>
+                    <h3>Midnight Musk</h3>
+                    <div class="sizes">
+                        <button class="size-btn active" data-price="159">50ml • $159</button>
+                        <button class="size-btn" data-price="239">100ml • $239</button>
+                    </div>
+                    <p class="price">$159</p>
+                    <button class="btn-card" onclick="addToCart(this)">Add to Cart</button>
+                </div>
 
-  <!-- Contact -->
-  <section id="contact" class="section">
-    <div class="container">
-      <h2>اتصل بي</h2>
-      <div class="contact-info">
-        <p>📧 <a href="mailto:{{بريدك}}">{{بريدك}}</a></p>
-        <p>📞 <a href="tel:{{رقمك}}">{{رقمك}}</a></p>
-        <p style="margin-top: 30px;">يسعدني التواصل لأي مشاريع أو استفسارات</p>
-      </div>
-    </div>
-  </section>
+                <!-- عطر 5 -->
+                <div class="card" data-aos="fade-up" data-aos-delay="500">
+                    <div class="media-wrapper">
+                        <img src="imags/im5.jpg" alt="Amber Noir">
+                        <video src="imags/im5.mp4" muted loop playsinline preload="none"></video>
+                    </div>
+                    <h3>Amber Noir</h3>
+                    <div class="sizes">
+                        <button class="size-btn active" data-price="199">50ml • $199</button>
+                        <button class="size-btn" data-price="299">100ml • $299</button>
+                    </div>
+                    <p class="price">$199</p>
+                    <button class="btn-card" onclick="addToCart(this)">Add to Cart</button>
+                </div>
 
-  <footer>
-    <p>© 2025 أسامة السيد سعد. جميع الحقوق محفوظة.</p>
-  </footer>
+                <!-- عطر 6 -->
+                <div class="card" data-aos="fade-up" data-aos-delay="600">
+                    <div class="media-wrapper">
+                        <img src="imags/im6.jpg" alt="Paris Night">
+                        <video src="imags/im6.mp4" muted loop playsinline preload="none"></video>
+                    </div>
+                    <h3>Paris Night</h3>
+                    <div class="sizes">
+                        <button class="size-btn active" data-price="175">50ml • $175</button>
+                        <button class="size-btn" data-price="259">100ml • $259</button>
+                    </div>
+                    <p class="price">$175</p>
+                    <button class="btn-card" onclick="addToCart(this)">Add to Cart</button>
+                </div>
 
+                <!-- عطر 7 -->
+                <div class="card" data-aos="fade-up" data-aos-delay="700">
+                    <div class="media-wrapper">
+                        <img src="imags/im7.jpg" alt="Saffron Gold">
+                        <video src="imags/im7.mp4" muted loop playsinline preload="none"></video>
+                    </div>
+                    <h3>Saffron Gold</h3>
+                    <div class="sizes">
+                        <button class="size-btn active" data-price="195">50ml • $195</button>
+                        <button class="size-btn" data-price="289">100ml • $289</button>
+                    </div>
+                    <p class="price">$195</p>
+                    <button class="btn-card" onclick="addToCart(this)">Add to Cart</button>
+                </div>
+
+                <!-- عطر 8 -->
+                <div class="card" data-aos="fade-up" data-aos-delay="800">
+                    <div class="media-wrapper">
+                        <img src="imags/im8.jpg" alt="Velvet Bloom">
+                        <video src="imags/im8.mp4" muted loop playsinline preload="none"></video>
+                    </div>
+                    <h3>Velvet Bloom</h3>
+                    <div class="sizes">
+                        <button class="size-btn active" data-price="149">50ml • $149</button>
+                        <button class="size-btn" data-price="229">100ml • $229</button>
+                    </div>
+                    <p class="price">$149</p>
+                    <button class="btn-card" onclick="addToCart(this)">Add to Cart</button>
+                </div>
+
+                <!-- عطر 9 -->
+                <div class="card" data-aos="fade-up" data-aos-delay="900">
+                    <div class="media-wrapper">
+                        <img src="imags/im9.jpg" alt="Imperial">
+                        <video src="imags/im9.mp4" muted loop playsinline preload="none"></video>
+                    </div>
+                    <h3>Imperial</h3>
+                    <div class="sizes">
+                        <button class="size-btn active" data-price="209">50ml • $209</button>
+                        <button class="size-btn" data-price="319">100ml • $319</button>
+                    </div>
+                    <p class="price">$209</p>
+                    <button class="btn-card" onclick="addToCart(this)">Add to Cart</button>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <footer class="footer">
+        <div class="container">
+            <p>© 2025 Misk Parisé • Handcrafted with Passion in Paris</p>
+        </div>
+    </footer>
+
+    <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
+    <script>
+        AOS.init({ once: true, duration: 1200 });
+        let cart = [];
+
+        // فيديوهات العطور على الـ hover
+        document.querySelectorAll('.media-wrapper').forEach(w => {
+            const v = w.querySelector('video');
+            w.addEventListener('mouseenter', () => v.play());
+            w.addEventListener('mouseleave', () => { v.pause(); v.currentTime = 0; });
+        });
+
+        // إضافة للسلة
+        function addToCart(btn) {
+            const card = btn.closest('.card');
+            const name = card.querySelector('h3').textContent.trim();
+            const price = parseInt(card.querySelector('.price').textContent.replace('$', ''));
+            const size = card.querySelector('.size-btn.active').textContent.split(' • ')[0];
+            const img = card.querySelector('img').src;
+
+            cart.push({ name, price, size, img });
+            btn.textContent = "Added";
+            btn.classList.add('added');
+            updateCart();
+        }
+
+        // تحديث السلة
+        function updateCart() {
+            const items = document.getElementById('cartItems');
+            const count = document.querySelector('.cart-count');
+            const total = document.getElementById('cartTotal');
+            items.innerHTML = '';
+            let sum = 0;
+
+            cart.forEach((item, i) => {
+                sum += item.price;
+                items.innerHTML += `
+                    <div style="display:flex;align-items:center;gap:15px;padding:18px 0;border-bottom:1px solid #eee;">
+                        <img src="${item.img}" style="width:70px;height:90px;object-fit:cover;border-radius:12px;">
+                        <div>
+                            <h4>${item.name}</h4>
+                            <p>${item.size} • $${item.price}</p>
+                        </div>
+                        <span style="margin-left:auto;cursor:pointer;font-size:20px;" onclick="removeFromCart(${i})">×</span>
+                    </div>`;
+            });
+
+            count.textContent = cart.length;
+            total.textContent = '$' + sum;
+
+            const ar = document.documentElement.dir === 'rtl';
+            let msg = ar ? "مرحباً، أريد طلب:\n\n" : "Hello, I want to order:\n\n";
+            cart.forEach(i => msg += `• ${i.name} - ${i.size} - $${i.price}\n`);
+            msg += `\nTotal: $${sum}\nThank you!`;
+            document.getElementById('sendWhatsapp').href = `https://wa.me/201234567890?text=${encodeURIComponent(msg)}`;
+        }
+
+        function removeFromCart(i) { cart.splice(i,1); updateCart(); }
+        function toggleCart() { document.getElementById('sidebar').classList.toggle('open'); }
+        function openOrder() { window.open("https://wa.me/201234567890", "_blank"); }
+
+        // تبديل اللغة
+        function switchLang(l) {
+            const ar = l === 'ar';
+            document.documentElement.lang = l;
+            document.documentElement.dir = ar ? 'rtl' : 'ltr';
+
+            document.querySelector('.hero-content p').textContent = ar ? "جوهر الأناقة الأبدية" : "The Essence of Eternal Elegance";
+            document.querySelector('.btn-hero').textContent = ar ? "استكشف المجموعة" : "Explore Collection";
+            document.querySelector('.section-title').textContent = ar ? "المجموعة المميزة" : "Signature Collection";
+            document.querySelector('.sidebar-header h2').textContent = ar ? "طلباتك" : "Your Order";
+            document.querySelector('.send-whatsapp').textContent = ar ? "إرسال الطلب عبر واتساب" : "Send Order via WhatsApp";
+            document.querySelector('footer p').innerHTML = ar ? "© ٢٠٢٥ مسك باريزيه • مصنوع بحب في باريس" : "© 2025 Misk Parisé • Handcrafted with Passion in Paris";
+
+            document.querySelectorAll('.lang-btn').forEach(b => b.classList.toggle('active', b.getAttribute('onclick').includes(l)));
+            updateCart();
+        }
+
+        // تغيير السعر عند اختيار الحجم
+        document.querySelectorAll('.size-btn').forEach(b => {
+            b.onclick = function() {
+                this.closest('.sizes').querySelectorAll('.size-btn').forEach(x => x.classList.remove('active'));
+                this.classList.add('active');
+                this.closest('.card').querySelector('.price').textContent = '$' + this.dataset.price;
+            };
+        });
+    </script>
 </body>
 </html>
